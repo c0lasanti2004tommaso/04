@@ -115,6 +115,24 @@ footer{background:var(--dark);border-top:1px solid var(--border-d);padding:28px 
   #other-projects{padding:60px 20px 80px;}
   footer{flex-direction:column;gap:10px;padding:20px;}
 }
+
+/* The Change: video cover */
+.video-project .pc-desc p{color:rgba(255,255,255,.68);}
+.gallery.has-video{display:block;}
+.video-cover{display:block;overflow:hidden;border:1px solid rgba(255,255,255,.18);border-radius:10px;background:var(--dark2);color:var(--white);text-decoration:none;transition:border-color .25s,box-shadow .25s;}
+.video-cover:hover{border-color:var(--warm);box-shadow:0 16px 48px rgba(0,0,0,.3);}
+.video-cover:focus-visible{outline:3px solid var(--warm);outline-offset:5px;}
+.video-cover-visual{display:block;position:relative;aspect-ratio:16/9;overflow:hidden;}
+.gallery .video-cover img{width:100%;height:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;filter:none;transition:transform .4s;}
+.video-cover:hover img{transform:scale(1.025);}
+.video-play{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.12);}
+.video-play svg{width:68px;height:68px;padding:22px;border-radius:50%;background:var(--warm);box-shadow:0 4px 28px rgba(0,0,0,.4);fill:white;}
+.video-cover-caption{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;}
+.video-cover-title{display:block;font-family:var(--font-head);font-size:26px;letter-spacing:.04em;line-height:1.2;}
+.video-cover-label{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.65);margin-top:6px;}
+.video-cover-arrow{font-size:24px;color:var(--warm);}
+@media(max-width:600px){.video-cover-caption{padding:16px;}.video-play svg{width:54px;height:54px;padding:17px;}.video-project .nav-links{gap:14px;}.video-project .nav-cta{display:none;}}
+@media(prefers-reduced-motion:reduce){.video-cover,.gallery .video-cover img{transition:none;}}
 </style>
 </head>
 <body>
@@ -196,8 +214,9 @@ document.querySelectorAll('a,button,.op-card').forEach(el=>{
 const projects=[
   {id:0,title:'The Change',subtitle:'cortometraggio',cat:'Video · Montaggio',num:'001',
    img:'change01.png',
-   desc: '<p>Progetto audiovisivo che racconta il cambiamento climatico, mettendo al centro il ruolo dell’uomo e le conseguenze delle sue azioni sull’ambiente. Attraverso immagini e contrasti, mostra un mondo che si sta deteriorando, ma lascia spazio anche a una possibilità: quella di invertire la rotta.</p><p> È un invito a prendere consapevolezza e ad agire, prima che sia troppo tardi, perché dove il danno non è ancora irreversibile, — <em>il cambiamento è ancora possibile.</em></p><p> Materiali recuperati da archivi e post-produzione autonoma. Particolare cura nel Sound Design.</p><p><a href="https://www.youtube.com/watch?v=J8Z8tM5E1Ss" target="_blank">https://www.youtube.com/watch?v=J8Z8tM5E1Ss</a></p>',desc: '<p>Progetto audiovisivo che racconta il cambiamento climatico, mettendo al centro il ruolo dell’uomo e le conseguenze delle sue azioni sull’ambiente. Attraverso immagini e contrasti, mostra un mondo che si sta deteriorando, ma lascia spazio anche a una possibilità: quella di invertire la rotta.</p><p> È un invito a prendere consapevolezza e ad agire, prima che sia troppo tardi, perché dove il danno non è ancora irreversibile, — <em>il cambiamento è ancora possibile.</em></p><p> Materiali recuperati da archivi e post-produzione autonoma. Particolare cura nel Sound Design.</p><p><a href="https://www.youtube.com/watch?v=J8Z8tM5E1Ss" target="_blank">https://www.youtube.com/watch?v=J8Z8tM5E1Ss</a></p>',
-   gallery:['change03.png','change04.png','change02.png'],
+   desc: '<p>Progetto audiovisivo che racconta il cambiamento climatico, mettendo al centro il ruolo dell’uomo e le conseguenze delle sue azioni sull’ambiente. Attraverso immagini e contrasti, mostra un mondo che si sta deteriorando, ma lascia spazio anche a una possibilità: quella di invertire la rotta.</p><p> È un invito a prendere consapevolezza e ad agire, prima che sia troppo tardi, perché dove il danno non è ancora irreversibile, — <em>il cambiamento è ancora possibile.</em></p><p> Materiali recuperati da archivi e post-produzione autonoma. Particolare cura nel Sound Design.</p>',
+   video:'J8Z8tM5E1Ss',
+   gallery:[],
    meta:[{l:'Anno',v:'2025'},{l:'genere',v:'documentario'},{l:'Software',v:'Premiere, DaVinci'},{l:'Durata',v:'01:56 min'}],
    tags:['Editing','Sound Design','Color Grading','Storytelling']},
   {id:1,title:'Modellazione 3D',subtitle:'scultura digitale',cat:'3D · CGI',num:'002',
@@ -271,7 +290,9 @@ function loadProject(id){
 
   // gallery
   const gal=document.getElementById('proj-gallery');
-  gal.innerHTML=p.gallery.map(g=>`<img src="${g}" alt="">`).join('');
+  document.body.classList.toggle('video-project',Boolean(p.video));
+  gal.classList.toggle('has-video',Boolean(p.video));
+  gal.innerHTML=p.video ? `<a class="video-cover" href="https://www.youtube.com/watch?v=${p.video}&amp;autoplay=1" target="_blank" rel="noopener noreferrer" aria-label="Guarda ${p.title} su YouTube (si apre in una nuova scheda)"><span class="video-cover-visual"><img src="https://i.ytimg.com/vi/${p.video}/maxresdefault.jpg" alt="Copertina del cortometraggio ${p.title}" width="1280" height="720" loading="lazy" onerror="this.onerror=null;this.src='change01.png'"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 4v16l12-8z"/></svg></span></span><span class="video-cover-caption"><span><span class="video-cover-title">${p.title}</span><span class="video-cover-label">Guarda il cortometraggio su YouTube</span></span><span class="video-cover-arrow" aria-hidden="true">↗</span></span></a>` : p.gallery.map(g=>`<img src="${g}" alt="">`).join('');
 
   // meta
   const metaBox=document.getElementById('proj-meta');
