@@ -239,8 +239,9 @@ const projects=[
    tags:['After Effects','Motion','Typography','Keyframe']},
   {id:4,title:"The Weekend Tape",subtitle:"cortometraggio",cat:'Regia · Editing',num:'005',
    img:'TWWT.jpg',
-   desc: '<p>Progetto audiovisivo che racconta un weekend apparentemente normale, destinato a trasformarsi in qualcosa di molto più inquietante. Tra riprese amatoriali, tensione e strani eventi, il confine tra realtà e finzione diventa sempre più sottile.</p><p><a href="https://www.youtube.com/watch?v=tLqMfs87UEY" target="_blank">https://www.youtube.com/watch?v=tLqMfs87UEY</a></p>',
-   gallery:['screen04.png','screen02.png','screen03.png','screen06.png'],
+   desc: '<p>Progetto audiovisivo che racconta un weekend apparentemente normale, destinato a trasformarsi in qualcosa di molto più inquietante. Tra riprese amatoriali, tensione e strani eventi, il confine tra realtà e finzione diventa sempre più sottile.</p>',
+   video:'tLqMfs87UEY',
+   gallery:[],
    meta:[{l:'Anno',v:'2025/2026'},{l:'Genere',v:'mockumentary horror'},{l:'Software',v:'Premiere, After Effects, Audition'},{l:'Durata',v:'09:52 min'}],
    tags:['Regia','Editing','Narrativa','Premiere']},
   {id:5,title:'Landscapes',subtitle:'La vastità come soggetto',cat:'Fotografia',num:'006',
@@ -292,7 +293,7 @@ function loadProject(id){
   const gal=document.getElementById('proj-gallery');
   document.body.classList.toggle('video-project',Boolean(p.video));
   gal.classList.toggle('has-video',Boolean(p.video));
-  gal.innerHTML=p.video ? `<a class="video-cover" href="https://www.youtube.com/watch?v=${p.video}&amp;autoplay=1" target="_blank" rel="noopener noreferrer" aria-label="Guarda ${p.title} su YouTube (si apre in una nuova scheda)"><span class="video-cover-visual"><img src="https://i.ytimg.com/vi/${p.video}/maxresdefault.jpg" alt="Copertina del cortometraggio ${p.title}" width="1280" height="720" loading="lazy" onerror="this.onerror=null;this.src='change01.png'"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 4v16l12-8z"/></svg></span></span><span class="video-cover-caption"><span><span class="video-cover-title">${p.title}</span><span class="video-cover-label">Guarda il cortometraggio su YouTube</span></span><span class="video-cover-arrow" aria-hidden="true">↗</span></span></a>` : p.gallery.map(g=>`<img src="${g}" alt="">`).join('');
+  gal.innerHTML=p.video ? `<a class="video-cover" href="https://www.youtube.com/watch?v=${p.video}&amp;autoplay=1" target="_blank" rel="noopener noreferrer" aria-label="Guarda ${p.title} su YouTube (si apre in una nuova scheda)"><span class="video-cover-visual"><img src="https://i.ytimg.com/vi/${p.video}/maxresdefault.jpg" alt="Copertina del cortometraggio ${p.title}" width="1280" height="720" loading="lazy" onerror="this.onerror=null;this.src='${p.img}'"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 4v16l12-8z"/></svg></span></span><span class="video-cover-caption"><span><span class="video-cover-title">${p.title}</span><span class="video-cover-label">Guarda il cortometraggio su YouTube</span></span><span class="video-cover-arrow" aria-hidden="true">↗</span></span></a>` : p.gallery.map(g=>`<img src="${g}" alt="">`).join('');
 
   // meta
   const metaBox=document.getElementById('proj-meta');
