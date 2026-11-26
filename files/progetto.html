@@ -119,6 +119,11 @@ footer{background:var(--dark);border-top:1px solid var(--border-d);padding:28px 
 /* The Change: video cover */
 .video-project .pc-desc p{color:rgba(255,255,255,.68);}
 .gallery.has-video{display:block;}
+.gallery.has-shorts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;}
+.gallery.has-shorts .video-cover-visual,.gallery.has-shorts .video-cover img{aspect-ratio:9/16;}
+.gallery.has-shorts .video-cover-caption{padding:16px;gap:10px;}
+.gallery.has-shorts .video-cover-title{font-size:22px;}
+@media(max-width:400px){.gallery.has-shorts{gap:12px;}.gallery.has-shorts .video-cover-caption{padding:12px;}.gallery.has-shorts .video-cover-title{font-size:18px;}.gallery.has-shorts .video-cover-label{font-size:9px;}}
 .video-cover{display:block;overflow:hidden;border:1px solid rgba(255,255,255,.18);border-radius:10px;background:var(--dark2);color:var(--white);text-decoration:none;transition:border-color .25s,box-shadow .25s;}
 .video-cover:hover{border-color:var(--warm);box-shadow:0 16px 48px rgba(0,0,0,.3);}
 .video-cover:focus-visible{outline:3px solid var(--warm);outline-offset:5px;}
@@ -233,8 +238,9 @@ const projects=[
    tags:['Aziendale','montaggio','color grading','Brand identity']},
   {id:3,title:'Animazioni 2D',subtitle:'Motion Graphics',cat:'Motion Design',num:'004',
    img:'Smart_02.jpg',
-   desc: '<p>Raccolta di animazioni 2D.</p><ul><li><a href="https://www.youtube.com/watch?v=JIBlLUYpvXw" target="_blank">Guarda il Video 1 su YouTube</a></li><li><a href="https://www.youtube.com/watch?v=e6KpwRpMTeg" target="_blank">Guarda il Video 2 su YouTube</a></li><li><a href="https://www.youtube.com/watch?v=A708aw2sMho" target="_blank">Guarda il Video 3 su YouTube</a></li><li><a href="https://www.youtube.com/watch?v=X0lC8RMPlME" target="_blank">Guarda il Video 4 su YouTube</a></li><li><a href="https://www.youtube.com/watch?v=n_j6MWnlPa4" target="_blank">Guarda il Video 5 su YouTube</a></li><li><a href="https://www.youtube.com/watch?v=VKZPhPrlz6I" target="_blank">Guarda il Video 6 su YouTube</a></li></ul>', 
-   gallery:['screenafter04.png','screenafter02.png','screenafter06.png','screenafter03.png'],
+   desc:'<p>Raccolta di animazioni 2D.</p>',
+   shorts:['6EDaa3GROBw','A9keBGjEUAE','y55cHQxoFCs','wACJcAUqCpI'],
+   gallery:[],
    meta:[{l:'Anno',v:'2025/2026'},{l:'Tipo',v:'Motion Graphics'},{l:'Software',v:'After Effects, Illustrator, Premiere'},{l:'Stile',v:'Cartoon'}],
    tags:['After Effects','Motion','2D','Keyframe']},
   {id:4,title:"The Weekend Tape",subtitle:"cortometraggio",cat:'Regia · Editing',num:'005',
@@ -305,9 +311,10 @@ function loadProject(id){
 
   // gallery
   const gal=document.getElementById('proj-gallery');
-  document.body.classList.toggle('video-project',Boolean(p.video));
+  document.body.classList.toggle('video-project',Boolean(p.video || p.shorts));
   gal.classList.toggle('has-video',Boolean(p.video));
-  gal.innerHTML=p.video ? `<a class="video-cover" href="https://www.youtube.com/watch?v=${p.video}&amp;autoplay=1" target="_blank" rel="noopener noreferrer" aria-label="Guarda ${p.title} su YouTube (si apre in una nuova scheda)"><span class="video-cover-visual"><img src="https://i.ytimg.com/vi/${p.video}/maxresdefault.jpg" alt="Copertina del video ${p.title}" width="1280" height="720" loading="lazy" onerror="this.onerror=null;this.src='${p.img}'"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 4v16l12-8z"/></svg></span></span><span class="video-cover-caption"><span><span class="video-cover-title">${p.title}</span><span class="video-cover-label">${p.videoLabel || 'Guarda il cortometraggio su YouTube'}</span></span><span class="video-cover-arrow" aria-hidden="true">↗</span></span></a>` : p.gallery.map(g=>`<img src="${g}" alt="">`).join('');
+  gal.classList.toggle('has-shorts',Boolean(p.shorts));
+  gal.innerHTML=p.shorts ? p.shorts.map((id,i)=>`<a class="video-cover" href="https://www.youtube.com/shorts/${id}" target="_blank" rel="noopener noreferrer" aria-label="Guarda Animazione 2D ${i+1} su YouTube (si apre in una nuova scheda)"><span class="video-cover-visual"><img src="https://i.ytimg.com/vi/${id}/maxresdefault.jpg" alt="Copertina animazione 2D ${i+1}" width="360" height="640" loading="lazy"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 4v16l12-8z"/></svg></span></span><span class="video-cover-caption"><span><span class="video-cover-title">Animazione 2D · 0${i+1}</span><span class="video-cover-label">Guarda su YouTube</span></span><span class="video-cover-arrow" aria-hidden="true">↗</span></span></a>`).join('') : p.video ? `<a class="video-cover" href="https://www.youtube.com/watch?v=${p.video}&amp;autoplay=1" target="_blank" rel="noopener noreferrer" aria-label="Guarda ${p.title} su YouTube (si apre in una nuova scheda)"><span class="video-cover-visual"><img src="https://i.ytimg.com/vi/${p.video}/maxresdefault.jpg" alt="Copertina del video ${p.title}" width="1280" height="720" loading="lazy" onerror="this.onerror=null;this.src='${p.img}'"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 4v16l12-8z"/></svg></span></span><span class="video-cover-caption"><span><span class="video-cover-title">${p.title}</span><span class="video-cover-label">${p.videoLabel || 'Guarda il cortometraggio su YouTube'}</span></span><span class="video-cover-arrow" aria-hidden="true">↗</span></span></a>` : p.gallery.map(g=>`<img src="${g}" alt="">`).join('');
 
   // meta
   const metaBox=document.getElementById('proj-meta');
