@@ -119,6 +119,15 @@ footer{background:var(--dark);border-top:1px solid var(--border-d);padding:28px 
 /* The Change: video cover */
 .video-project .pc-desc p{color:rgba(255,255,255,.68);}
 .gallery.has-video{display:block;}
+.gallery.has-media{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 16px;}
+.has-media .media-wide{grid-column:1/-1;}
+.gallery .media-short .video-cover-visual,.gallery .media-short img{aspect-ratio:9/16;}
+.media-short .video-cover-caption{padding:14px 12px;gap:8px;}
+.media-short .video-cover-title{font-size:20px;}
+.media-short .video-cover-label{font-size:9px;letter-spacing:.06em;}
+.media-short .video-play svg{width:54px;height:54px;padding:17px;}
+@media(max-width:600px){.gallery.has-media{gap:20px 10px;}.media-short .video-cover-caption{padding:10px 8px;}.media-short .video-cover-title{font-size:16px;}.media-short .video-cover-arrow{display:none;}.media-short .video-play svg{width:42px;height:42px;padding:13px;}}
+
 .gallery.has-shorts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;}
 .gallery.has-shorts .video-cover-visual,.gallery.has-shorts .video-cover img{aspect-ratio:9/16;}
 .gallery.has-shorts .video-cover-caption{padding:16px;gap:10px;}
@@ -294,6 +303,13 @@ const projects=[
    gallery:[],
    meta:[{l:'Anno',v:'2025'},{l:'Genere',v:'Docu-story aziendale'},{l:'Software',v:'Premiere'},{l:'Durata',v:'05:39 min'}],
    tags:['riprese','montaggio','videointervista','comunicazione']},
+  {id:12,title:'Mouvers',subtitle:'Presentazione macchinario e Mashup',cat:'Video',num:'013',
+   img:'voy_02.jpg',
+   desc:"<p>Montaggio e post-produzione di shorts e video realizzati a partire dalle clip fornite dall'azienda.</p>",
+   media:[{id:'Z7x9mm_oTsQ',short:true},{id:'5buD53q0qn0',short:true},{id:'EIOK-KH-wa0',short:true},{id:'oQjEGO6u1a8'},{id:'hi4YhnbMo_w'},{id:'VnETnhRwH1M'},{id:'d1gHwGm-1V8',time:5},{id:'b63M4KOctOE'},{id:'35QUgWUx-tY',time:4},{id:'b5S8flgSCr8'},{id:'eAp-UfHglac'},{id:'jS-Vq9F4RPg'},{id:'u2MSkjkFfm4'}],
+   gallery:[],
+   meta:[{l:'Anno',v:'2025/2026'},{l:'Genere',v:'Presentazione macchinario e Mashup'},{l:'Software',v:'Premiere, After Effects, Audition, Photoshop'},{l:'Durata',v:'variabile'}],
+   tags:['macchinari','montaggio','post-produzione','aziendale']},
 ];
 
 function getParam(key){return new URLSearchParams(location.search).get(key);}
@@ -311,10 +327,15 @@ function loadProject(id){
 
   // gallery
   const gal=document.getElementById('proj-gallery');
-  document.body.classList.toggle('video-project',Boolean(p.video || p.shorts));
+  document.body.classList.toggle('video-project',Boolean(p.video || p.shorts || p.media));
   gal.classList.toggle('has-video',Boolean(p.video));
   gal.classList.toggle('has-shorts',Boolean(p.shorts));
-  gal.innerHTML=p.shorts ? p.shorts.map((id,i)=>`<a class="video-cover" href="https://www.youtube.com/shorts/${id}" target="_blank" rel="noopener noreferrer" aria-label="Guarda Animazione 2D ${i+1} su YouTube (si apre in una nuova scheda)"><span class="video-cover-visual"><img src="https://i.ytimg.com/vi/${id}/maxresdefault.jpg" alt="Copertina animazione 2D ${i+1}" width="360" height="640" loading="lazy"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 4v16l12-8z"/></svg></span></span><span class="video-cover-caption"><span><span class="video-cover-title">Animazione 2D · 0${i+1}</span><span class="video-cover-label">Guarda su YouTube</span></span><span class="video-cover-arrow" aria-hidden="true">↗</span></span></a>`).join('') : p.video ? `<a class="video-cover" href="https://www.youtube.com/watch?v=${p.video}&amp;autoplay=1" target="_blank" rel="noopener noreferrer" aria-label="Guarda ${p.title} su YouTube (si apre in una nuova scheda)"><span class="video-cover-visual"><img src="https://i.ytimg.com/vi/${p.video}/maxresdefault.jpg" alt="Copertina del video ${p.title}" width="1280" height="720" loading="lazy" onerror="this.onerror=null;this.src='${p.img}'"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 4v16l12-8z"/></svg></span></span><span class="video-cover-caption"><span><span class="video-cover-title">${p.title}</span><span class="video-cover-label">${p.videoLabel || 'Guarda il cortometraggio su YouTube'}</span></span><span class="video-cover-arrow" aria-hidden="true">↗</span></span></a>` : p.gallery.map(g=>`<img src="${g}" alt="">`).join('');
+  gal.classList.toggle('has-media',Boolean(p.media));
+  gal.innerHTML=p.media ? p.media.map((v,i)=>{
+    const title=v.short ? 'Short · 0'+(i+1) : 'Mouvers · '+String(i-2).padStart(2,'0');
+    const url=v.short ? 'https://www.youtube.com/shorts/'+v.id : 'https://www.youtube.com/watch?v='+v.id+(v.time?'&amp;t='+v.time+'s':'')+'&amp;autoplay=1';
+    return `<a class="video-cover ${v.short?'media-short':'media-wide'}" href="${url}" target="_blank" rel="noopener noreferrer" aria-label="Guarda ${title} su YouTube (si apre in una nuova scheda)"><span class="video-cover-visual"><img src="https://i.ytimg.com/vi/${v.id}/maxresdefault.jpg" alt="Copertina ${title}" width="${v.short?360:1280}" height="${v.short?640:720}" loading="lazy"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 4v16l12-8z"/></svg></span></span><span class="video-cover-caption"><span><span class="video-cover-title">${title}</span><span class="video-cover-label">Guarda su YouTube</span></span><span class="video-cover-arrow" aria-hidden="true">↗</span></span></a>`;
+  }).join('') : p.shorts ? p.shorts.map((id,i)=>`<a class="video-cover" href="https://www.youtube.com/shorts/${id}" target="_blank" rel="noopener noreferrer" aria-label="Guarda Animazione 2D ${i+1} su YouTube (si apre in una nuova scheda)"><span class="video-cover-visual"><img src="https://i.ytimg.com/vi/${id}/maxresdefault.jpg" alt="Copertina animazione 2D ${i+1}" width="360" height="640" loading="lazy"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 4v16l12-8z"/></svg></span></span><span class="video-cover-caption"><span><span class="video-cover-title">Animazione 2D · 0${i+1}</span><span class="video-cover-label">Guarda su YouTube</span></span><span class="video-cover-arrow" aria-hidden="true">↗</span></span></a>`).join('') : p.video ? `<a class="video-cover" href="https://www.youtube.com/watch?v=${p.video}&amp;autoplay=1" target="_blank" rel="noopener noreferrer" aria-label="Guarda ${p.title} su YouTube (si apre in una nuova scheda)"><span class="video-cover-visual"><img src="https://i.ytimg.com/vi/${p.video}/maxresdefault.jpg" alt="Copertina del video ${p.title}" width="1280" height="720" loading="lazy" onerror="this.onerror=null;this.src='${p.img}'"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 4v16l12-8z"/></svg></span></span><span class="video-cover-caption"><span><span class="video-cover-title">${p.title}</span><span class="video-cover-label">${p.videoLabel || 'Guarda il cortometraggio su YouTube'}</span></span><span class="video-cover-arrow" aria-hidden="true">↗</span></span></a>` : p.gallery.map(g=>`<img src="${g}" alt="">`).join('');
 
   // meta
   const metaBox=document.getElementById('proj-meta');
